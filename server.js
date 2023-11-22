@@ -3,6 +3,7 @@ const http=require('http');
 const {Server}=require('socket.io');
 const {join}=require('node:path')
 const app=express();
+const fs=require('fs');
 const server=http.createServer(app);
 const io= new Server(server);
 
@@ -24,40 +25,59 @@ io.on('connection',user=>{
 })
 
 
-const pattern=[[0,1],
-[1,0]];
 
 
+
+let pattern=[[0,1,0],
+             [1,0,1],
+             [0,1,0],
+             [1,0,1],
+             [1,1,1],
+             [0,0,0]];
 function display(colour){
-    
-    for(let i=0;i<pattern.length;i++){
-        for(let j=0;j<pattern.length;j++){
-            if(pattern[i][j]==1){
-                let coordinates=(i+1)+" "+(j+1);
-                console.log("displayed",coordinates);
-                console.log(hashMap[coordinates]);
-                io.to(hashMap[coordinates]).emit('colour',[colour[0],colour[1],colour[2]]);
+  
+        let i=1;
+        for(i;i<(pattern.length-1);i+=3){
+            for(let j=1;j<(pattern[0].length-1);j+=3){
+                let char=97;
+                for(let k=i-1;k<=i+1;k++){
+                    for(let m=j-1;m<=j+1;m++){
+                        if(pattern[k][m]==1){
+                            let box=String.fromCharCode(char);
+                            
+                            console.log(char,box,`${i} ${j}`)
+                            io.to(hashMap[`${i} ${j}`]).emit('colour',box,[colour[0],colour[1],colour[2]]);
+                            
+                        }
+                        char++;
+                    }
+                }
             }
         }
-    }
-    colour[2]++;
+        
 }
+
+app.get('/playsound',(req,res)=>{
+      const audioBuffer=fs.readFileSync('left.wav')
+      for (let i = 0; i < audioBuffer.length; i += 1024) {
+        const chunk = audioBuffer.slice(i, i + 1024);
+        io.emit('audioChunk', chunk);
+      }
+      res.send('done');
+})
+
 
 
 app.get('/display',(req,res)=>{
     let x=parseInt(req.query.x);
     let y=parseInt(req.query.y);
     let z=parseInt(req.query.z);
-    let colour=[x,y,z];
-    console.log(colour);
-    display(colour);
-    
+    let color=[x,y,z];
+    display(color);
     res.send("done");
 })
 
-app.get('/rgb',(req,res)=>{
-    
-});
+
 
 server.listen(9000,()=>{
     console.log("started server");
