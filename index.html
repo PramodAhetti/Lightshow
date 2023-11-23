@@ -129,18 +129,31 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
+
       socket.emit("message", "hello");
+
+
       socket.on("colour", (box, data) => {
         console.log(box);
         console.log(data);
-        const gridItems = document.querySelectorAll(".grid-item");
-        gridItems.forEach((item) => {
-          item.style.backgroundColor = "white";
-        });
-        document.getElementById(
-          box
-        ).style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
+ 
+        document.getElementById(box).style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
+        setTimeout(()=>{
+          const gridItems = document.querySelectorAll("div");
+          gridItems.forEach((item) => {
+              item.style.backgroundColor = "white";
+         })
+        },2000);
       });
+
+      socket.on('wave',(data)=>{
+        console.log(data);
+        document.getElementById('main').style.backgroundColor= `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
+        setTimeout(()=>{
+          document.getElementById('main').style.backgroundColor="white";
+        },1000);
+      })
+
       function sendCoordinates() {
         let coordinates = document.getElementById("input").value;
         socket.emit("coordinates", coordinates);
