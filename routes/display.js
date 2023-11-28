@@ -1,3 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const socketServer=require('../socket-server.js')
+
+
+const io=socketServer.io;
+const hashMap=socketServer.hashMap;
 
 const pattern = [[//hi
     [1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
@@ -8,9 +15,9 @@ const pattern = [[//hi
 ]
 ,[//gn
     [1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-    [1, 0, 1, 1, 1, 1, 0, 1, 0, 0],
-    [1, 0, 0, 0, 1, 1, 0, 0, 1, 0],
+    [1, 0, 0, 0, 0, 1, 1, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 1, 1, 0, 0, 1, 1],
     [1, 1, 1, 1, 1, 1, 0, 0, 0, 1]
 ]
 ,[//a
@@ -67,7 +74,7 @@ const pattern = [[//hi
 
 
 
-function display(colour,index,io){
+function display(colour,index){
   
         let i=2;
         console.log(pattern[index]);
@@ -82,8 +89,9 @@ function display(colour,index,io){
                             
                             console.log(char,box,`${i} ${j}`)
                             io.to(hashMap[`${i} ${j}`]).emit('colour',box,[colour[0],colour[1],colour[2]]);
-                            
+                           
                         }
+                        colour[2]+=1;
                         char++;
                     }
                 }
@@ -91,4 +99,22 @@ function display(colour,index,io){
         }
         
 }
-module.exports=display;
+
+
+
+
+
+
+
+
+router.get('/',(req,res)=>{
+    let x=parseInt(req.query.x);
+    let y=parseInt(req.query.y);
+    let z=parseInt(req.query.z);
+    let index=parseInt(req.query.index);
+    let color=[x,y,z];
+    display(color,index);
+    res.send("done");
+})
+
+module.exports = router;
