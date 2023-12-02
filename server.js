@@ -3,12 +3,18 @@ const io=require('./socket-server.js').io;
 const server=require('./socket-server.js').server;
 const hashMap=require('./socket-server.js').hashMap;
 
-const {join}=require('node:path')
+const path=require('path');
 
 
 app.get('/home',(req,res)=>{
-        res.sendFile(join(__dirname ,"index.html"));
+        res.sendFile(path.join(__dirname ,"index.html"));
 })
+
+
+app.get('/control',(req,res)=>{
+        res.sendFile(path.join(__dirname ,"controller.html"));
+})
+
 io.on('connection',user=>{
        console.log("user connected");
 
@@ -23,6 +29,8 @@ io.on('connection',user=>{
 
 
 app.use('/display',require('./routes/display.js'))
+
+
 app.use('/wave',require('./routes/wave.js'));
 
 server.listen(9000,()=>{

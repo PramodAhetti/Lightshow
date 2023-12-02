@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<style>
+    body{
+      display: grid;
+      grid-template-rows: repeat(22,1fr);
+      grid-template-columns:repeat(22,1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+    .feature{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        grid-row:15/22;
+        grid-column: 5/18;
+        border-radius: 5vw;
+        padding: 1vw;
+        background-color: aqua;
+    }
+    .debug{
+        border: 2px solid black;
+    }
+    button{
+       font-size: 4vw;
+       margin: 1vw;
+       border-radius: 2vw;
+       background-color: blueviolet;
+       color: white;
+    }
+
+</style>
+<script>
+    let display=async ()=>{
+        const msg=document.getElementById('msg').value;
+       let response=await axios.get(`http://localhost:9000/display?x=10&y=10&z=10&index=1&msg=${msg}`);
+       console.log(response);
+    }
+    function wave(){
+        console.log("wave here:");
+    }
+</script>
+<body>
+    <div class="feature debug">
+        <input placeholder="message" class="debug feature" id="msg">
+        <button class="debug" onclick='display()'>Display</button>
+        <button class="debug" onclick="wave()">Wave</button>
+    </div>
+</body>
+</html>
