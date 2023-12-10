@@ -138,13 +138,14 @@
         console.log(data);
  
         document.getElementById(box).style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
-        setTimeout(()=>{
-          const gridItems = document.querySelectorAll("div");
-          gridItems.forEach((item) => {
-              item.style.backgroundColor = "white";
-         })
-        },2000);
       });
+      
+      socket.on('reset',(data)=>{
+        const docs=document.querySelectorAll('div');
+        docs.forEach(element => {
+          element.style.backgroundColor="white";
+        });
+      })
 
       socket.on('wave',(data)=>{
         console.log(data);
