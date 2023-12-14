@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/server.js"></script>
+</head>
+<body>
+    <script>
+        const wave = () => {
+            window.alert("hello there")
+        }
+    </script>
+    <div class="btn-container">
+        <button onclick="wave()" id="wave-btn" >Wave</button>
+    </div>
+    <style>
+.btn-container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+
+        #wave-btn{
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            background-color: chocolate;
+            color: white;
+            font-size: 22px;
+
+        }
+    </style>
+</body>
+</html>
